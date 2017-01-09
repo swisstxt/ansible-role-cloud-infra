@@ -1,0 +1,93 @@
+---
+- name: upload SSH keys
+  local_action:
+    module: cs_sshkeypair
+    name: "{{ lookup('env', 'USER') }}"
+    public_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    api_region: "{{ cs_region }}"
+  run_once: yes
+
+- name: create VM instance
+  local_action:
+    module: cs_instance
+    name: "{{ inventory_hostname_short }}"
+    group: "{{ cs_group | default(omit) }}"
+    template: "{{ cs_template }}"
+    service_offering: "{{ cs_offering }}"
+    ssh_key: "{{ lookup('env', 'USER') }}"
+    zone: "{{ cs_zone }}"
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    networks: "{{ cs_networks }}"
+    force: "{{ cs_force }}"
+    api_region: "{{ cs_region }}"
+    state: started
+    user_data: "{{ lookup('template', 'cloud-init.j2') }}"
+
+- name: setup port forwardings
+  local_action:
+    module: cs_portforward
+    ip_address: "{{ cs_public_ip }}"
+    vm: "{{ inventory_hostname_short }}"
+    public_port: "{{ item.public_port }}"
+    private_port: "{{ item.private_port | default(item.public_port) }}"
+    protocol: "{{ item.protocol | default('tcp') }}"
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    zone: "{{ cs_zone }}"
+    api_region: "{{ cs_region }}"
+  with_items: "{{ cs_portforwarding_rules }}"
+  when: cs_public_ip != "" and cs_portforwarding_rules
+
+- name: create static NAT
+  local_action:
+    module: cs_staticnat
+    ip_address: "{{ cs_public_ip }}"
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    zone: "{{ cs_zone }}"
+    vm: "{{ inventory_hostname_short }}"
+    api_region: "{{ cs_region }}"
+  when: cs_public_ip != "" and not cs_portforwarding_rules
+
+- name: open icmp
+  local_action:
+    module: cs_firewall
+    ip_address: "{{ cs_public_ip }}"
+    protocol: "icmp"
+    icmp_type: -1
+    icmp_code: -1
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    zone: "{{ cs_zone }}"
+    api_region: "{{ cs_region }}"
+  when: cs_public_ip != ""
+
+- name: open firewall ports
+  local_action:
+    module: cs_firewall
+    ip_address: "{{ cs_public_ip }}"
+    start_port: "{{ item.start_port }}"
+    end_port: "{{ item.end_port | default(item.start_port) }}"
+    protocol: "{{ item.protocol | default('tcp') }}"
+    cidr: "{{ item.cidr | default('0.0.0.0/0') }}"
+    project: "{{ cs_project }}"
+    domain: "{{ cs_domain }}"
+    zone: "{{ cs_zone }}"
+    api_region: "{{ cs_region }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ cs_firewall_rules }}"
+  when: cs_public_ip != "" and cs_firewall_rules
+
+- name: remember which host to check for SSH
+  set_fact:
+    ansible_check_host: "{{ ansible_host }}"
+
+- name: waiting for SSH to come up for
+  wait_for:
+    port: "{{ ansible_port | default(22) }}"
+    host: "{{ ansible_check_host }}"
+  delegate_to: "{{ cs_jumphost }}"
+

@@ -1,0 +1,20 @@
+---
+cs_zone: null
+cs_project: null
+cs_domain: null
+cs_region: "cloudstack"
+
+cs_public_ip: ""
+cs_portforwarding_rules: []
+cs_firewall_rules: []
+cs_networks: null
+cs_ip_networks: null
+cs_force: false
+cs_offering: 1cpu_1gb
+cs_template: CentOS-7-x86_64
+
+cs_disk: false
+cs_disk_offering: "Perf STXT"
+cs_disk_size: 100
+
+cs_jumphost: localhost
