@@ -24,6 +24,15 @@ cs_domain: null
 # Which cloudstack region to use, default: cloudstack
 cs_region: "cloudstack"
 
+# How the VM should be named, default: inventory_hostname_short
+cs_instance_name: "{{ inventory_hostname_short" }}
+
+# What display name to be used, default: null
+cs_instance_display_name: null
+
+# What user data template should be used, default: cloud-init.j2
+cs_instance_userdata_template: 'cloud-init.j2'
+
 # Which IP should be assigned to the VM, default: None
 cs_public_ip: ""
 

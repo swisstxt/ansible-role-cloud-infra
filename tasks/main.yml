@@ -9,10 +9,11 @@
     api_region: "{{ cs_region }}"
   run_once: yes
 
-- name: create VM instance
+- name: create VM instance started
   local_action:
     module: cs_instance
-    name: "{{ inventory_hostname_short }}"
+    name: "{{ cs_instance_name }}"
+    display_name: "{{ cs_instance_display_name | default(omit) }}"
     group: "{{ cs_group | default(omit) }}"
     template: "{{ cs_template }}"
     service_offering: "{{ cs_offering }}"
@@ -23,14 +24,14 @@
     networks: "{{ cs_networks }}"
     force: "{{ cs_force }}"
     api_region: "{{ cs_region }}"
+    user_data: "{{ lookup('template', cs_instance_userdata_template ) }}"
     state: started
-    user_data: "{{ lookup('template', 'cloud-init.j2') }}"
 
 - name: setup port forwardings
   local_action:
     module: cs_portforward
     ip_address: "{{ cs_public_ip }}"
-    vm: "{{ inventory_hostname_short }}"
+    vm: "{{ cs_instance_name }}"
     public_port: "{{ item.public_port }}"
     private_port: "{{ item.private_port | default(item.public_port) }}"
     protocol: "{{ item.protocol | default('tcp') }}"
@@ -48,7 +49,7 @@
     project: "{{ cs_project }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
-    vm: "{{ inventory_hostname_short }}"
+    vm: "{{ cs_instance_name }}"
     api_region: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
 
