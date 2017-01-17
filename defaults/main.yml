@@ -4,7 +4,7 @@ cs_project: null
 cs_domain: null
 cs_region: "cloudstack"
 
-cs_instance_name: "{{ inventory_hostname_short" }}
+cs_instance_name: "{{ inventory_hostname_short }}"
 cs_instance_display_name: null
 cs_instance_userdata_template: 'cloud-init.j2'
 
