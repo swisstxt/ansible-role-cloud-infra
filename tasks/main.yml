@@ -38,6 +38,7 @@
     project: "{{ cs_project }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
+    state: "{{ item.state | default('present') }}"
     api_region: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
   when: cs_public_ip != "" and cs_portforwarding_rules
