@@ -30,7 +30,7 @@
 - name: setup port forwardings
   local_action:
     module: cs_portforward
-    ip_address: "{{ cs_public_ip }}"
+    ip_address: "{{ item.public_ip | default(cs_public_ip) }}"
     vm: "{{ cs_instance_name }}"
     public_port: "{{ item.public_port }}"
     private_port: "{{ item.private_port | default(item.public_port) }}"
@@ -41,7 +41,7 @@
     state: "{{ item.state | default('present') }}"
     api_region: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
-  when: cs_public_ip != "" and cs_portforwarding_rules
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_portforwarding_rules
 
 - name: create static NAT
   local_action:
@@ -70,7 +70,7 @@
 - name: open firewall ports
   local_action:
     module: cs_firewall
-    ip_address: "{{ cs_public_ip }}"
+    ip_address: "{{ item.public_ip | default(cs_public_ip) }}"
     start_port: "{{ item.start_port }}"
     end_port: "{{ item.end_port | default(item.start_port) }}"
     protocol: "{{ item.protocol | default('tcp') }}"
@@ -81,7 +81,7 @@
     api_region: "{{ cs_region }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ cs_firewall_rules }}"
-  when: cs_public_ip != "" and cs_firewall_rules
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules
 
 - name: remember which host to check for SSH
   set_fact:
