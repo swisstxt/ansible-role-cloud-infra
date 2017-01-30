@@ -82,7 +82,6 @@
     state: "{{ item.state | default('present') }}"
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules
-  tags: debug
 
 - name: remember which host to check for SSH
   set_fact:
