@@ -39,12 +39,21 @@ cs_public_ip: ""
 # When cs_public_ip is set and cs_portforwarding_rules is not empty, port
 # forwarding are configured instead of a static NAT, e.g.:
 # cs_portforwarding_rules:
-# - { public_port: 21, private_port: 21, protocol: tcp }
+# NOTE: if procotol is not set, "tcp" will defaulted, choices [ tcp, udp ].
+# - { public_port: 21, private_port: 21 }
+# - { public_port: 53, private_port: 53,  procotol: upd }
+
 cs_portforwarding_rules: []
 
 # When cs_public_ip is set configure these firewall rules, e.g.:
 # cs_firewall_rules:
-# - { start_port: 21, end_port: 21, protocol: tcp, cidr: 10.10.100.0/22 }
+# NOTE: if procotol is not set, "tcp" will defaulted, choices [ tcp, udp, icmp ]
+# - { start_port: 21, end_port: 21, cidr: 10.10.100.0/22 }
+# NOTE: if cidr is not set, "0.0.0.0/0" will defaulted
+# - { start_port: 53, end_port: 53, procotol: upd }
+# - { icmp_type 8, icmp_code 0, protocol: icmp }
+# NOTE: if icmp_type or icmp_code is not set, "-1" (all) will defaulted
+# - { protocol: icmp, cidr: 10.100.10.0/22 }
 cs_firewall_rules: []
 
 # What networks to use
@@ -94,6 +103,7 @@ cs_firewall_rules:
   - { start_port: 80, end_port: 80, protocol: tcp }
   - { start_port: 443, end_port: 443, protocol: tcp }
   - { start_port: 2322, end_port: 2322, protocol: udp, cidr: 10.100.10.0/22 }
+  - { icmp_type 8, icmp_code 0, protocol: icmp, cidr: 10.100.10.0/22 }
 
 cs_networks:
   - Server Network
