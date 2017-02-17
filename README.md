@@ -94,6 +94,7 @@ cs_firewall_rules:
   - { start_port: 80, end_port: 80, protocol: tcp }
   - { start_port: 443, end_port: 443, protocol: tcp }
   - { start_port: 2322, end_port: 2322, protocol: udp, cidr: 10.100.10.0/22 }
+  - { icmp_type 8, icmp_code 0, protocol: icmp, cidr: 10.100.10.0/22 }
 
 cs_networks:
   - Server Network
