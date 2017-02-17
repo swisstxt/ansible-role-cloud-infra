@@ -54,20 +54,22 @@
     api_region: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
 
-- name: open icmp
+- name: open firewall port icmp
   local_action:
     module: cs_firewall
-    ip_address: "{{ cs_public_ip }}"
+    ip_address: "{{ item.public_ip | default(cs_public_ip) }}"
     protocol: "icmp"
-    icmp_type: -1
-    icmp_code: -1
+    cidr: "{{ item.cidr | default('0.0.0.0/0') }}"
+    icmp_type: "{{ item.icmp_type | default(-1) }}"
+    icmp_code: "{{ item.icmp_code | default(-1) }}"
     project: "{{ cs_project }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
     api_region: "{{ cs_region }}"
-  when: cs_public_ip != ""
+  with_items: "{{ cs_firewall_rules }}"
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol == 'icmp'
 
-- name: open firewall ports
+- name: open firewall ports tcp/udp
   local_action:
     module: cs_firewall
     ip_address: "{{ item.public_ip | default(cs_public_ip) }}"
@@ -81,7 +83,7 @@
     api_region: "{{ cs_region }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ cs_firewall_rules }}"
-  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol != 'icmp'
 
 - name: remember which host to check for SSH
   set_fact:
