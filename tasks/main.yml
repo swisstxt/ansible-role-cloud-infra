@@ -83,7 +83,7 @@
     api_region: "{{ cs_region }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ cs_firewall_rules }}"
-  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol != 'icmp'
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and (item.protocal is not defined or item.protocol != 'icmp')
 
 - name: remember which host to check for SSH
   set_fact:
