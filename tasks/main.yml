@@ -31,7 +31,7 @@
   local_action:
     module: cs_portforward
     ip_address: "{{ item.public_ip | default(cs_public_ip) }}"
-    vm: "{{ cs_instance_name }}"
+    vm: "{{ item.vm | default(cs_instance_name) }}"
     public_port: "{{ item.public_port }}"
     private_port: "{{ item.private_port | default(item.public_port) }}"
     protocol: "{{ item.protocol | default('tcp') }}"
