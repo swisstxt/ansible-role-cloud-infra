@@ -2,6 +2,7 @@
 cs_zone: null
 cs_project: null
 cs_domain: null
+cs_account: null
 cs_region: "cloudstack"
 
 cs_instance_name: "{{ inventory_hostname_short }}"
