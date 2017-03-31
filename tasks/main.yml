@@ -105,7 +105,7 @@
   local_action:
     module: cs_volume
     vm: "{{ cs_instance_name }}"
-    name: "DATA-{{ cs_instance_name }}"
+    name: "{{ cs_disk_name | default('DATA-' + cs_instance_name) }}"
     disk_offering: "{{ cs_disk_offering }}"
     size: "{{ cs_disk_size }}"
     project: "{{ cs_project }}"
