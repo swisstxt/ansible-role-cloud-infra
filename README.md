@@ -25,7 +25,7 @@ cs_domain: null
 cs_region: "cloudstack"
 
 # How the VM should be named, default: inventory_hostname_short
-cs_instance_name: "{{ inventory_hostname_short" }}
+cs_instance_name: "{{ inventory_hostname_short }}"
 
 # What display name to be used, default: null
 cs_instance_display_name: null
