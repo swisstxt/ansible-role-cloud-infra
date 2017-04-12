@@ -11,7 +11,7 @@ See http://docs.ansible.com/ansible/guide_cloudstack.html for a up to date guide
 Role Variables
 --------------
 
-~~~yaml
+~~~ yaml
 # Which cloudstack zone to use, default: None (first zone found).
 cs_zone: null
 
@@ -51,7 +51,7 @@ cs_portforwarding_rules: []
 # - { start_port: 21, end_port: 21, cidr: 10.10.100.0/22 }
 # NOTE: if cidr is not set, "0.0.0.0/0" will defaulted
 # - { start_port: 53, end_port: 53, procotol: upd }
-# - { icmp_type 8, icmp_code 0, protocol: icmp }
+# - { icmp_type: 8, icmp_code: 0, protocol: icmp }
 # NOTE: if icmp_type or icmp_code is not set, "-1" (all) will defaulted
 # - { protocol: icmp, cidr: 10.100.10.0/22 }
 cs_firewall_rules: []
@@ -83,7 +83,7 @@ Example Playbook
 ----------------
 
 Inventory:
-~~~ini
+~~~ ini
 [jump]
 jump-01.example.com  cs_public_ip=10.10.10.10 ansible_host=10.10.10.10
 
@@ -92,7 +92,7 @@ web-01.example.com  cs_public_ip=10.10.10.100
 ~~~
 
 Webservers group variables:
-~~~yaml
+~~~ yaml
 # file: group_vars/webservers
 cs_portforwarding_rules:
   - { public_port: 80 }
@@ -103,7 +103,7 @@ cs_firewall_rules:
   - { start_port: 80, end_port: 80, protocol: tcp }
   - { start_port: 443, end_port: 443, protocol: tcp }
   - { start_port: 2322, end_port: 2322, protocol: udp, cidr: 10.100.10.0/22 }
-  - { icmp_type 8, icmp_code 0, protocol: icmp, cidr: 10.100.10.0/22 }
+  - { icmp_type: 8, icmp_code: 0, protocol: icmp, cidr: 10.100.10.0/22 }
 
 cs_networks:
   - Server Network
@@ -111,7 +111,7 @@ cs_networks:
 ~~~
 
 Jump host group variables:
-~~~yaml
+~~~ yaml
 # file: group_vars/jump
 cs_portforwarding_rules:
   - { public_port: 22 }
@@ -121,7 +121,7 @@ cs_firewall_rules:
 ~~~
 
 The cloud playbook:
-~~~yaml
+~~~ yaml
 # file: cloud.yml
 - name: install jump hosts in the cloud
   hosts: jump
