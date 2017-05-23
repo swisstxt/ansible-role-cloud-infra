@@ -72,7 +72,7 @@
     zone: "{{ cs_zone }}"
     api_region: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
-  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol == 'icmp'
+  when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol is defined and item.protocol == 'icmp'
 
 - name: open firewall ports tcp/udp
   local_action:
