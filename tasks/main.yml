@@ -42,6 +42,7 @@
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
     state: "{{ item.state | default('present') }}"
+    vpc: "{{ cs_vpc }}"
     api_region: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_portforwarding_rules
@@ -55,6 +56,8 @@
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
     vm: "{{ cs_instance_name }}"
+    vpc: "{{ cs_vpc }}"
+    network: "{{ cs_staticnat_network }}"
     api_region: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
 
