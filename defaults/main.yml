@@ -18,6 +18,9 @@ cs_force: false
 cs_offering: 1cpu_1gb
 cs_template: CentOS-7-x86_64
 
+cs_vpc: null
+cs_staticnat_network: null
+
 cs_disk: false
 cs_disk_offering: "Perf STXT"
 cs_disk_size: 100
