@@ -30,6 +30,9 @@ cs_instance_name: "{{ inventory_hostname_short }}"
 # What display name to be used, default: null
 cs_instance_display_name: null
 
+# Group the VM should be added, default: null
+cs_group: null
+
 # What user data template should be used, default: cloud-init.j2
 cs_instance_userdata_template: 'cloud-init.j2'
 

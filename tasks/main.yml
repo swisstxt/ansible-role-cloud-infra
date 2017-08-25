@@ -14,8 +14,8 @@
   local_action:
     module: cs_instance
     name: "{{ cs_instance_name }}"
-    display_name: "{{ cs_instance_display_name | default(omit) }}"
-    group: "{{ cs_group | default(omit) }}"
+    display_name: "{{ cs_instance_display_name }}"
+    group: "{{ cs_group }}"
     template: "{{ cs_template }}"
     service_offering: "{{ cs_offering }}"
     ssh_key: "{{ lookup('env', 'USER') }}"

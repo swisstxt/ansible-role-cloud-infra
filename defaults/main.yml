@@ -7,6 +7,7 @@ cs_region: "cloudstack"
 
 cs_instance_name: "{{ inventory_hostname_short }}"
 cs_instance_display_name: null
+cs_group: null
 cs_instance_userdata_template: 'cloud-init.j2'
 
 cs_public_ip: ""
