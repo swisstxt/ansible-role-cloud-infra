@@ -77,6 +77,17 @@ cs_disk_size: 100
 
 # Check for SSH reachabilty using this host.
 cs_jumphost: localhost
+
+# Override cloud-init defaults.
+# NOTE: Don't set this variable if you don't need to override anything!
+#cs_override_cloud_cfg:
+  # Enable the root account (default is disabled)
+  #enable_root: yes
+  # Disable network autoconfiguration by cloud-init
+  # (default is to overwrite /etc/sysconf/network-scripts/ifcfg-*)
+  #disable_network: yes
+  # Disable resetting the hostname to the Cloudstack default
+  #disable_hostname: yes
 ~~~
 
 Example Playbook

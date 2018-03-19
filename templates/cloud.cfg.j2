@@ -1,0 +1,88 @@
+# {{ ansible_managed }}
+users:
+ - default
+
+{% if cs_override_cloud_cfg.enable_root | default(False) %}
+# OVERRIDE ENABLE_ROOT
+disable_root: 0
+# OVERRIDE_END ENABLE_ROOT
+{% else %}
+disable_root: 1
+{% endif %}
+ssh_pwauth:   0
+
+mount_default_fields: [~, ~, 'auto', 'defaults,nofail', '0', '2']
+resize_rootfs_tmp: /dev
+ssh_deletekeys:   0
+ssh_genkeytypes:  ~
+syslog_fix_perms: ~
+
+{% if cs_override_cloud_cfg.disable_network | default(False) %}
+# OVERRIDE DISABLE_NETWORK
+network:
+  config: disabled
+# OVERRIDE_END DISABLE_NETWORK
+{% endif %}
+
+cloud_init_modules:
+ - migrator
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+{% if cs_override_cloud_cfg.disable_hostname | default(False) %}
+# OVERRIDE DISABLE_HOSTNAME
+ #- set_hostname
+ #- update_hostname
+# OVERRIDE_END DISABLE_HOSTNAME
+{% else %}
+ - set_hostname
+ - update_hostname
+{% endif %}
+ - update_etc_hosts
+ - rsyslog
+ - users-groups
+ - ssh
+
+cloud_config_modules:
+ - mounts
+ - locale
+ - set-passwords
+ - rh_subscription
+ - yum-add-repo
+ - package-update-upgrade-install
+ - timezone
+ - puppet
+ - chef
+ - salt-minion
+ - mcollective
+ - disable-ec2-metadata
+ - runcmd
+
+cloud_final_modules:
+ - rightscale_userdata
+ - scripts-per-once
+ - scripts-per-boot
+ - scripts-per-instance
+ - scripts-user
+ - ssh-authkey-fingerprints
+ - keys-to-console
+ - phone-home
+ - final-message
+ - power-state-change
+
+system_info:
+  default_user:
+    name: centos
+    lock_passwd: true
+    gecos: Cloud User
+    groups: [wheel, adm, systemd-journal]
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    shell: /bin/bash
+  distro: rhel
+  paths:
+    cloud_dir: /var/lib/cloud
+    templates_dir: /etc/cloud/templates
+  ssh_svcname: sshd
+
+# vim:syntax=yaml

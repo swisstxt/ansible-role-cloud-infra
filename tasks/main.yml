@@ -113,3 +113,12 @@
     api_region: "{{ cs_region }}"
     state: attached
   when: cs_disk
+
+- name: deploy custom cloud-init config
+  template:
+    src: cloud.cfg.j2
+    dest: /etc/cloud/cloud.cfg
+    owner: root
+    group: root
+    mode: 0644
+  when: cs_override_cloud_cfg is defined
