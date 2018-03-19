@@ -94,15 +94,10 @@
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and (item.protocol is not defined or item.protocol != 'icmp')
 
-- name: remember which host to check for SSH
-  set_fact:
-    ansible_check_host: "{{ ansible_host }}"
-
-- name: waiting for SSH to come up for
-  wait_for:
-    port: "{{ ansible_port | default(22) }}"
-    host: "{{ ansible_check_host }}"
-  delegate_to: "{{ cs_jumphost }}"
+- name: waiting for SSH connection
+  wait_for_connection:
+    delay: 10
+    timeout: 300
 
 - name: add additonal volume to VM
   local_action:
