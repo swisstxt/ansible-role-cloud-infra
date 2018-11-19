@@ -73,10 +73,11 @@ cs_offering: 1cpu_1gb
 # What template to use
 cs_template: CentOS-7-x86_64
 
-# Set "cs_disk: true" for additional data disk
-cs_disk: false
-cs_disk_offering: "Perf STXT"
-cs_disk_size: 100
+# Set "cs_disks" for additional data disks
+cs_disks: []
+# cs_disks:
+  # - { name: "DATA-psql", size: 100, disk_offering: "Perf STXT" }
+  # - { size: 50, disk_offering: "Eco STXT" }
 
 # Check for SSH reachabilty using this host.
 cs_jumphost: localhost
