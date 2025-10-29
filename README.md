@@ -91,6 +91,9 @@ cs_jumphost: localhost
   #disable_network: yes
   # Disable resetting the hostname to the Cloudstack default
   #disable_hostname: yes
+
+# Set ssh key name, default: $USER in env
+cs_sshkey_name: null
 ~~~
 
 Example Playbook

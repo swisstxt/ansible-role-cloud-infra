@@ -27,3 +27,5 @@ cs_disk_offering: "Perf STXT"
 cs_disk_size: 100
 
 cs_jumphost: localhost
+
+cs_sshkey_name: null

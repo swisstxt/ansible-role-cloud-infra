@@ -2,7 +2,7 @@
 - name: upload SSH keys
   local_action:
     module: cs_sshkeypair
-    name: "{{ lookup('env', 'USER') }}"
+    name: "{{ cs_sshkey_name | default(lookup('env', 'USER')) }}"
     public_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     project: "{{ cs_project }}"
     account: "{{ cs_account }}"
@@ -19,7 +19,7 @@
     group: "{{ cs_group }}"
     template: "{{ cs_template }}"
     service_offering: "{{ cs_offering }}"
-    ssh_key: "{{ lookup('env', 'USER') }}"
+    ssh_key: "{{ cs_sshkey_name | default(lookup('env', 'USER')) }}"
     zone: "{{ cs_zone }}"
     project: "{{ cs_project }}"
     account: "{{ cs_account }}"
