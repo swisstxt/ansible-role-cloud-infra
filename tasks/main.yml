@@ -7,7 +7,8 @@
     project: "{{ cs_project }}"
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
-    api_region: "{{ cs_region }}"
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   run_once: yes
 
 - name: create VM instance started
@@ -25,9 +26,10 @@
     domain: "{{ cs_domain }}"
     networks: "{{ cs_networks }}"
     force: "{{ cs_force }}"
-    api_region: "{{ cs_region }}"
     user_data: "{{ lookup('template', cs_instance_userdata_template ) }}"
     state: started
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
 
 - name: setup port forwardings
   local_action:
@@ -43,7 +45,8 @@
     zone: "{{ cs_zone }}"
     state: "{{ item.state | default('present') }}"
     vpc: "{{ cs_vpc }}"
-    api_region: "{{ cs_region }}"
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_portforwarding_rules
 
@@ -58,7 +61,8 @@
     vm: "{{ cs_instance_name }}"
     vpc: "{{ cs_vpc }}"
     network: "{{ cs_staticnat_network }}"
-    api_region: "{{ cs_region }}"
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
 
 - name: open firewall port icmp
@@ -73,7 +77,8 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
-    api_region: "{{ cs_region }}"
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol is defined and item.protocol == 'icmp'
 
@@ -89,8 +94,9 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
-    api_region: "{{ cs_region }}"
     state: "{{ item.state | default('present') }}"
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and (item.protocol is not defined or item.protocol != 'icmp')
 
@@ -110,8 +116,9 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
-    api_region: "{{ cs_region }}"
     state: attached
+    environment:
+      CLOUDSTACK_REGION: "{{ cs_region }}"
   when: cs_disk
 
 - name: deploy custom cloud-init config
