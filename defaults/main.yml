@@ -29,3 +29,6 @@ cs_disk_size: 100
 cs_jumphost: localhost
 
 cs_sshkey_name: null
+
+cs_api_key: null
+cs_api_secret: null

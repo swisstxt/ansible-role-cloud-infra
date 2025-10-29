@@ -7,6 +7,8 @@
     project: "{{ cs_project }}"
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
   run_once: yes
@@ -26,6 +28,8 @@
     domain: "{{ cs_domain }}"
     networks: "{{ cs_networks }}"
     force: "{{ cs_force }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     user_data: "{{ lookup('template', cs_instance_userdata_template ) }}"
     state: started
     environment:
@@ -45,6 +49,8 @@
     zone: "{{ cs_zone }}"
     state: "{{ item.state | default('present') }}"
     vpc: "{{ cs_vpc }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
@@ -61,6 +67,8 @@
     vm: "{{ cs_instance_name }}"
     vpc: "{{ cs_vpc }}"
     network: "{{ cs_staticnat_network }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
@@ -77,6 +85,8 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
@@ -94,6 +104,8 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     state: "{{ item.state | default('present') }}"
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
@@ -116,6 +128,8 @@
     account: "{{ cs_account }}"
     domain: "{{ cs_domain }}"
     zone: "{{ cs_zone }}"
+    api_key: "{{ cs_api_key }}"
+    api_secret: "{{ cs_api_secret }}"
     state: attached
     environment:
       CLOUDSTACK_REGION: "{{ cs_region }}"
