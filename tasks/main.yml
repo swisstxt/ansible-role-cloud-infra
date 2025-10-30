@@ -9,8 +9,8 @@
     domain: "{{ cs_domain }}"
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   run_once: yes
 
 - name: create VM instance started
@@ -32,8 +32,8 @@
     api_secret: "{{ cs_api_secret }}"
     user_data: "{{ lookup('template', cs_instance_userdata_template ) }}"
     state: started
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
 
 - name: setup port forwardings
   local_action:
@@ -51,8 +51,8 @@
     vpc: "{{ cs_vpc }}"
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_portforwarding_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_portforwarding_rules
 
@@ -69,8 +69,8 @@
     network: "{{ cs_staticnat_network }}"
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   when: cs_public_ip != "" and not cs_portforwarding_rules
 
 - name: open firewall port icmp
@@ -87,8 +87,8 @@
     zone: "{{ cs_zone }}"
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and item.protocol is defined and item.protocol == 'icmp'
 
@@ -107,8 +107,8 @@
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
     state: "{{ item.state | default('present') }}"
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   with_items: "{{ cs_firewall_rules }}"
   when: (cs_public_ip != "" or item.public_ip is defined) and cs_firewall_rules and (item.protocol is not defined or item.protocol != 'icmp')
 
@@ -131,8 +131,8 @@
     api_key: "{{ cs_api_key }}"
     api_secret: "{{ cs_api_secret }}"
     state: attached
-    environment:
-      CLOUDSTACK_REGION: "{{ cs_region }}"
+  environment:
+    CLOUDSTACK_REGION: "{{ cs_region }}"
   when: cs_disk
 
 - name: deploy custom cloud-init config
