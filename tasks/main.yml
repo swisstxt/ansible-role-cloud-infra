@@ -1,4 +1,9 @@
 ---
+- name: check if SSH key present
+  ansible.builtin.stat:
+    path: "~/.ssh/id_rsa.pub"
+  register: ssh_file
+
 - name: upload SSH keys
   local_action:
     module: cs_sshkeypair
@@ -12,6 +17,7 @@
   environment:
     CLOUDSTACK_REGION: "{{ cs_region }}"
   run_once: yes
+  when: ssh_file.stat.exists
 
 - name: create VM instance started
   local_action:
