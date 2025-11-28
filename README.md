@@ -95,6 +95,9 @@ cs_jumphost: localhost
 # Set ssh key name, default: $USER in env
 cs_sshkey_name: null
 
+# Set cloudstack api endpoint
+cs_api_url: null
+
 # set cloudstack api key per project
 cs_api_key: null
 cs_api_secret: null

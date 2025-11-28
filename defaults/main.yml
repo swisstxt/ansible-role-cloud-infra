@@ -30,5 +30,6 @@ cs_jumphost: localhost
 
 cs_sshkey_name: null
 
+cs_api_url: null
 cs_api_key: null
 cs_api_secret: null
